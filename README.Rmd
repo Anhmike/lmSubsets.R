@@ -1,0 +1,94 @@
+# lmSubsets
+
+[![](http://www.r-pkg.org/badges/version/lmSubsets)](https://cran.r-project.org/package=lmSubsets)
+![](https://cranlogs.r-pkg.org/badges/grand-total/lmSubsets)
+
+
+## Overview
+
+Exact and approximation algorithms for variable-subset selection in
+ordinary linear regression models.  Either compute all submodels with
+the lowest residual sum of squares, or determine the single-best
+submodel according to a pre-determined statistical criterion.
+[Hofmann et al. (2020)](http://dx.doi.org/10.18637/jss.v093.i03).
+
+
+## Installation
+
+```{r, eval = FALSE}
+# Install package from CRAN:
+install.packages("lmSubsets")
+```
+
+
+## Usage
+
+```{r, eval=TRUE}
+# load package
+library("lmSubsets")
+
+# load some data
+data("AirPollution", package = "lmSubsets")
+
+head(AirPollution)
+```
+
+### All-subsets regression
+
+```{r, eval=TRUE}
+# compute 3 best submodels for every subset size
+lm_all <- lmSubsets(mortality ~ ., data = AirPollution, nbest = 3)
+lm_all
+```
+
+```{r, eval=TRUE}
+# plot deviances and BICs
+plot(lm_all)
+```
+
+```{r, eval=TRUE, fig.asp = (14 * 3 + 1) / (16 * 3)}
+# plot heatmap, hilite 10 best submodels (BIC)
+image(lm_all, best = 1:3, hilite = 1:10, hilite_penalty = "BIC")
+```
+
+```{r, eval=TRUE}
+# evaluate summary statistics
+summary(lm_all)
+```
+
+### Best-subset regression
+
+```{r, eval=TRUE}
+# compute 20 best (BIC) submodels
+lm_best <- lmSelect(mortality ~ ., data = AirPollution, nbest = 20)
+lm_best
+```
+
+```{r, eval=TRUE}
+# plot deviances and BIC
+plot(lm_best)
+```
+
+```{r, eval=TRUE}
+# show heatmap
+image(lm_best, hilite = 1)
+```
+
+```{r, eval=TRUE}
+# evaluate summary statistics
+summary(lm_best)
+```
+
+
+## Authors
+
+```{r, eval=TRUE, echo=FALSE, results="hide"}
+meta <- packageDescription("lmSubsets")
+authors <- eval(parse(text = meta[["Authors@R"]]))
+authors <- authors[sapply(authors, function (pers) "aut" %in% pers$role)]
+maintainers_ix <- which(sapply(authors, function (pers) "cre" %in% pers$role))
+authors <- format(authors, include = c("given", "family"))
+authors[maintainers_ix] <- paste(authors[maintainers_ix], "(maintainer)")
+authors <- paste(authors, collapse = ", ")
+```
+`r authors`
