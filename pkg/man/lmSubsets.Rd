@@ -121,7 +121,7 @@ lmSubsets_fit(x, y, weights = NULL, offset = NULL, include = NULL,
 
 
 \examples{
-## load data (with logs for relative potentials)
+## load data
 data("AirPollution", package = "lmSubsets")
 
 
